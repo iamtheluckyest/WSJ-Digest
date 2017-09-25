@@ -1,0 +1,38 @@
+{
+  "name": "wsj-digest",
+  "version": "1.0.0",
+  "description": "View and save links to the most recent Wall Street Journal articles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamtheluckyest/WSJ-Digest.git"
+  },
+  "keywords": [
+    "WSJ",
+    "newspaper",
+    "news",
+    "Wall",
+    "Street",
+    "Journal",
+    "scrape",
+    "media",
+    "publishing"
+  ],
+  "author": "Annalisa Alden",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iamtheluckyest/WSJ-Digest/issues"
+  },
+  "homepage": "https://github.com/iamtheluckyest/WSJ-Digest#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.11.12",
+    "request": "^2.82.0"
+  }
+}
