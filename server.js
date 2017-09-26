@@ -1,16 +1,20 @@
-import express from "express";
-import handlebars from "express-handlebars";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import request from "request";
-import cheerio from "cheerio";
+var express = require( "express");
+var handlebars = require("express-handlebars");
+var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
 
-const port = process.env.PORT || 3000
+
+var port = process.env.PORT || 3000
 
 mongoose.Promise = Promise;
 
-const app = express();
- 
+var app = express();
+
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 app.use(bodyParser.urlencoded({
     extended: false
 }));
@@ -18,7 +22,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 mongoose.connect("mongodb://localhost/wsj");
-const db = mongoose.connection;
+var db = mongoose.connection;
 
 db.on("error", function(error) {
     console.log("Mongoose Error: ", error);
@@ -28,8 +32,9 @@ db.once("open", function(){
     console.log("Mongoose connection successful.");
 });
 
-// Import routes and give the server access to them.
-var routes = require("./controller/controller.js");
+// var routes and give the server access to them.
+require("./controller/controller.js")(app);
+require("./controller/scraper.js")(app);
 
 app.listen(port, function(){
     console.log("App running on port " + port);

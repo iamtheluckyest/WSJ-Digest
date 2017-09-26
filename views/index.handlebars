@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <form action="/scrape" method="GET" style="margin:auto;" class="mt-2 mb-2">
+            <button class="btn btn-success btn-lg">Get most recent headlines</button>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <h2 class="card-header">
+                    Headlines
+                </h2>
+                <div class="card-body">
+                    {{#each articles}}
+                    <div style="position:relative;">
+                        <a href="{{this.link}}" target="_blank">
+                            <h3 style="margin-right:100px;">{{this.title}}</h3>
+                        </a>
+                        <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#comment" data-title="{{this.title}}" data-id="{{this._id}}" style="position:absolute; top:0px; right:0px; cursor:pointer;">Comment</button>
+                        <p>{{this.description}}</p>
+                    </div>
+                    <hr> 
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="comment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Comment for "<span id="article-title"></span>"</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <form action="/comment" method="POST">
+                <div class="modal-body">
+                    <textarea rows="7" cols="59" name="comment"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input id="articleId" type="hidden" name="articleId">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#comment").on("show.bs.modal", function(event) {
+        var button = $(event.relatedTarget);
+        $("#article-title").text(button.attr("data-title"));
+        $("#articleId").val(button.attr("data-id"));
+    });
+</script>
