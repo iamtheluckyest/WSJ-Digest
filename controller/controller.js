@@ -15,25 +15,46 @@ module.exports = function(app) {
 
     app.post("/comment", function(req, res){
         var note = new Note(req.body)
-        note.save({comment: req.body.comment}, function(err, commentData){
-            if (err) {
-                res.send(err);
-            } else {
-                console.log(req.body.articleId)
-                Article.findOneAndUpdate({_id : req.body.articleId}, {note: commentData._id})
-                .exec(function(err, articleData) {
-                  if (err){
+        note.save({comment: req.body.comment, _id : req.body.commentId}, function(err, commentData){
+                if (err) {
                     res.send(err);
-                  } else {
-                    res.redirect("/");
-                  }
-                });
+                } else {
+                    Article.findOneAndUpdate({_id : req.body.articleId}, {note: commentData._id})
+                    .exec(function(err, articleData) {
+                    if (err){
+                        res.send(err);
+                    } else {
+                        res.redirect("/");
+                    }
+                    });
+                };
             }
-        })
+        );
     });
 
-    app.get("/comments", function(req, res) {
-        
-    })
+    app.get("/comment/:articleId", function(req, res) {
+        // Finish the route so it finds one article using the req.params.id,
+        Article.find({_id : req.params.articleId})
+        // and run the populate method with "note",
+        .populate("note")
+        // then responds with the article with the note included
+        .exec(function(err, data) {
+            if (err) {
+                res.send(err)
+            } else {
+                res.json(data[0])
+            };
+        });
+    });
+
+    app.delete("/comment/:commentId", function(req, res) {
+        Note.deleteOne({_id: req.params.commentId}, function(err, data){
+            if (err) {
+                res.send(err)
+            } else {
+                res.end();
+            }
+        });
+    });
 };
 
